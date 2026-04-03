@@ -12,6 +12,7 @@ import BloodTab from "./components/BloodTab";
 import IndicesTab from "./components/IndicesTab";
 import CrossRefTab from "./components/CrossRefTab";
 import SynthesisTab from "./components/SynthesisTab";
+import RecommendationsTab from "./components/RecommendationsTab";
 import HistoryPanel from "./components/HistoryPanel";
 
 function getInitialTheme() {
@@ -147,6 +148,7 @@ export default function VivoDashboard() {
         <TabButton active={tab === "indices"} label="Indices Calculés" onClick={() => setTab("indices")} count={calcs.length} colors={colors} />
         <TabButton active={tab === "cross"} label="Analyses Croisées" onClick={() => setTab("cross")} count={crossRefs.length} colors={colors} />
         <TabButton active={tab === "synthesis"} label="Synthèse" onClick={() => setTab("synthesis")} colors={colors} />
+        <TabButton active={tab === "recs"} label="Recommandations" onClick={() => setTab("recs")} colors={colors} />
       </div>
 
       {/* Content */}
@@ -165,6 +167,9 @@ export default function VivoDashboard() {
         )}
         {tab === "synthesis" && (
           <SynthesisTab values={values} calcs={calcs} crossRefs={crossRefs} compositeScores={compositeScores} projections={projections} filledCount={filledCount} totalMarkers={totalMarkers} colors={colors} />
+        )}
+        {tab === "recs" && (
+          <RecommendationsTab values={values} colors={colors} mode={mode} />
         )}
       </div>
 

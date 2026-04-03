@@ -1,8 +1,9 @@
 import { getStatus } from "../../utils/statusHelpers";
 import { getPercentile } from "../../utils/calculations";
 import StatusDot from "./StatusDot";
+import Sparkline from "./Sparkline";
 
-export default function MarkerInput({ marker, value, onChange, colors }) {
+export default function MarkerInput({ marker, value, onChange, colors, historicalPoints }) {
   const status = getStatus(value, marker);
   const hasValue = value !== "" && value !== undefined;
   const statusColor = colors[status] || colors.empty;
@@ -42,6 +43,9 @@ export default function MarkerInput({ marker, value, onChange, colors }) {
           </div>
         )}
       </div>
+      {historicalPoints && historicalPoints.length >= 2 && (
+        <Sparkline points={historicalPoints} optLow={marker.optLow} optHigh={marker.optHigh} colors={colors} />
+      )}
       <input
         type="number"
         step="any"

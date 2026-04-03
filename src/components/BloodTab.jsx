@@ -1,9 +1,33 @@
-import { useState } from "react";
-import { BLOOD_CATEGORIES } from "../data/bloodCategories";
+import { useState, useMemo } from "react";
+import { BLOOD_CATEGORIES, HISTORICAL_DATA } from "../data/bloodCategories";
 import MarkerInput from "./ui/MarkerInput";
 
 export default function BloodTab({ values, onChange, filledCount, totalMarkers, colors }) {
   const [expandedCat, setExpandedCat] = useState(null);
+
+  // Build sparkline points for each marker: historical + current
+  const sparklineData = useMemo(() => {
+    const data = {};
+    const allMarkers = BLOOD_CATEGORIES.flatMap((c) => c.markers);
+    for (const marker of allMarkers) {
+      const points = [];
+      for (const hist of HISTORICAL_DATA) {
+        const val = parseFloat(hist.values[marker.id]);
+        if (!isNaN(val)) {
+          points.push({ label: hist.date, value: val });
+        }
+      }
+      // Current value
+      const current = parseFloat(values[marker.id]);
+      if (!isNaN(current)) {
+        points.push({ label: "Actuel", value: current });
+      }
+      if (points.length >= 2) {
+        data[marker.id] = points;
+      }
+    }
+    return data;
+  }, [values]);
 
   return (
     <div>
@@ -34,7 +58,14 @@ export default function BloodTab({ values, onChange, filledCount, totalMarkers, 
             {isExpanded && (
               <div style={{ padding: "0 18px 14px" }}>
                 {cat.markers.map((m) => (
-                  <MarkerInput key={m.id} marker={m} value={values[m.id]} onChange={onChange} colors={colors} />
+                  <MarkerInput
+                    key={m.id}
+                    marker={m}
+                    value={values[m.id]}
+                    onChange={onChange}
+                    colors={colors}
+                    historicalPoints={sparklineData[m.id]}
+                  />
                 ))}
               </div>
             )}
