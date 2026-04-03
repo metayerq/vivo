@@ -38,7 +38,6 @@ export default function VivoDashboard() {
 
   const { colors, isDark } = useTheme(theme);
 
-  // Apply bg color to body
   useEffect(() => {
     document.body.style.background = colors.bg;
   }, [colors.bg]);
@@ -94,65 +93,60 @@ export default function VivoDashboard() {
 
       {/* Header */}
       <div style={{
-        padding: "24px 28px", borderBottom: `1px solid ${colors.border}`,
+        padding: "16px 16px", borderBottom: `1px solid ${colors.border}`,
         background: colors.headerGradient,
       }}>
-        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: 12 }}>
-          <div>
-            <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 4 }}>
-              <span style={{ fontSize: 24, fontWeight: 700, letterSpacing: 4, color: colors.accent }}>VIVO</span>
-              <span style={{ fontSize: 10, color: colors.textDimmed, letterSpacing: 1, borderLeft: `1px solid ${colors.divider}`, paddingLeft: 10 }}>PRECISION HEALTH INTELLIGENCE</span>
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: 8 }}>
+          <div style={{ minWidth: 0, flex: 1 }}>
+            <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 2 }}>
+              <span style={{ fontSize: 20, fontWeight: 700, letterSpacing: 3, color: colors.accent, flexShrink: 0 }}>VIVO</span>
+              <span className="hide-mobile" style={{ fontSize: 9, color: colors.textDimmed, letterSpacing: 1, borderLeft: `1px solid ${colors.divider}`, paddingLeft: 8, whiteSpace: "nowrap" }}>PRECISION HEALTH INTELLIGENCE</span>
             </div>
-            <div style={{ fontSize: 12, color: colors.textTertiary }}>Cross-référencement biomarqueurs × physiologie × objectifs</div>
+            <div className="hide-mobile" style={{ fontSize: 11, color: colors.textTertiary }}>Cross-référencement biomarqueurs × physiologie × objectifs</div>
           </div>
-          <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
-            <div style={{ textAlign: "right" }}>
-              <div style={{ fontSize: 13, fontWeight: 600, color: colors.text }}>Quentin Métayer</div>
-              <div style={{ fontSize: 11, color: colors.textTertiary }}>34 ans · 190 cm · 90.8 kg · Objectif: 18% BF</div>
+          <div style={{ display: "flex", alignItems: "center", gap: 8, flexShrink: 0 }}>
+            <div className="hide-mobile" style={{ textAlign: "right" }}>
+              <div style={{ fontSize: 12, fontWeight: 600, color: colors.text }}>Quentin Métayer</div>
+              <div style={{ fontSize: 10, color: colors.textTertiary }}>34 ans · 190 cm · 90.8 kg · 18% BF</div>
             </div>
             <button
               onClick={() => setHistoryOpen(true)}
               style={{
                 background: colors.surface, border: `1px solid ${colors.border}`,
-                borderRadius: 8, padding: "8px 10px", cursor: "pointer",
-                color: colors.textTertiary, fontSize: 16, lineHeight: 1,
-                transition: "border-color 0.2s",
+                borderRadius: 8, padding: "7px 9px", cursor: "pointer",
+                color: colors.textTertiary, fontSize: 14, lineHeight: 1,
               }}
               title="Historique"
-            >
-              📋
-            </button>
+            >📋</button>
             <button
               onClick={() => setSettingsOpen(true)}
               style={{
                 background: colors.surface, border: `1px solid ${colors.border}`,
-                borderRadius: 8, padding: "8px 10px", cursor: "pointer",
-                color: colors.textTertiary, fontSize: 16, lineHeight: 1,
-                transition: "border-color 0.2s",
+                borderRadius: 8, padding: "7px 9px", cursor: "pointer",
+                color: colors.textTertiary, fontSize: 14, lineHeight: 1,
               }}
               title="Réglages"
-            >
-              ⚙
-            </button>
+            >⚙</button>
           </div>
         </div>
       </div>
 
       {/* Tabs */}
-      <div style={{
-        padding: "12px 28px", display: "flex", gap: 8, overflowX: "auto",
+      <div className="tabs-scroll" style={{
+        padding: "10px 16px", display: "flex", gap: 6, overflowX: "auto",
         borderBottom: `1px solid ${colors.borderAccent}`,
+        WebkitOverflowScrolling: "touch",
       }}>
-        <TabButton active={tab === "profil"} label="Profil Physio" onClick={() => setTab("profil")} colors={colors} />
-        <TabButton active={tab === "blood"} label="Bilan Sanguin" onClick={() => setTab("blood")} count={filledCount} colors={colors} />
-        <TabButton active={tab === "indices"} label="Indices Calculés" onClick={() => setTab("indices")} count={calcs.length} colors={colors} />
-        <TabButton active={tab === "cross"} label="Analyses Croisées" onClick={() => setTab("cross")} count={crossRefs.length} colors={colors} />
+        <TabButton active={tab === "profil"} label="Profil" onClick={() => setTab("profil")} colors={colors} />
+        <TabButton active={tab === "blood"} label="Bilan" onClick={() => setTab("blood")} count={filledCount} colors={colors} />
+        <TabButton active={tab === "indices"} label="Indices" onClick={() => setTab("indices")} count={calcs.length} colors={colors} />
+        <TabButton active={tab === "cross"} label="Croisées" onClick={() => setTab("cross")} count={crossRefs.length} colors={colors} />
         <TabButton active={tab === "synthesis"} label="Synthèse" onClick={() => setTab("synthesis")} colors={colors} />
-        <TabButton active={tab === "recs"} label="Recommandations" onClick={() => setTab("recs")} colors={colors} />
+        <TabButton active={tab === "recs"} label="Recos" onClick={() => setTab("recs")} colors={colors} />
       </div>
 
       {/* Content */}
-      <div style={{ padding: "24px 28px", maxWidth: 960, margin: "0 auto" }}>
+      <div style={{ padding: "16px 16px", maxWidth: 960, margin: "0 auto" }}>
         {tab === "profil" && (
           <PhysioTab profile={PHYSIOLOGICAL_PROFILE} colors={colors} isDark={isDark} modality={modality} setModality={setModality} />
         )}
@@ -173,7 +167,6 @@ export default function VivoDashboard() {
         )}
       </div>
 
-      {/* History */}
       <HistoryPanel
         open={historyOpen}
         onClose={() => setHistoryOpen(false)}
@@ -185,7 +178,6 @@ export default function VivoDashboard() {
         colors={colors}
       />
 
-      {/* Settings */}
       <SettingsPanel
         open={settingsOpen}
         onClose={() => setSettingsOpen(false)}
@@ -198,6 +190,12 @@ export default function VivoDashboard() {
         onReset={handleReset}
         colors={colors}
       />
+
+      <style>{`
+        @media (max-width: 640px) {
+          .hide-mobile { display: none !important; }
+        }
+      `}</style>
     </div>
   );
 }

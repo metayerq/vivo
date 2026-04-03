@@ -37,7 +37,7 @@ export default function SettingsPanel({ open, onClose, theme, setTheme, mode, se
       <div
         onClick={(e) => e.stopPropagation()}
         style={{
-          width: 340, maxWidth: "90vw", height: "100%",
+          width: 340, maxWidth: "100vw", height: "100%",
           background: colors.settingsBg, borderLeft: `1px solid ${colors.border}`,
           padding: 28, overflowY: "auto",
         }}

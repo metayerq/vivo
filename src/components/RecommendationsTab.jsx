@@ -31,7 +31,7 @@ export default function RecommendationsTab({ values, colors, mode }) {
       {/* Strengths */}
       {recs.strengths.length > 0 && (
         <Section title="Points forts à maintenir" colors={colors}>
-          <div style={{ display: "grid", gap: 8, gridTemplateColumns: "repeat(auto-fill, minmax(220px, 1fr))" }}>
+          <div style={{ display: "grid", gap: 8, gridTemplateColumns: "repeat(auto-fill, minmax(min(220px, 100%), 1fr))" }}>
             {recs.strengths.map((s, i) => (
               <div key={i} style={{
                 padding: "12px 14px", borderRadius: 8,
@@ -50,7 +50,7 @@ export default function RecommendationsTab({ values, colors, mode }) {
 
       {/* Nutrition */}
       <Section title="Alimentation" colors={colors}>
-        <div style={{ display: "grid", gap: 12, gridTemplateColumns: "repeat(auto-fill, minmax(260px, 1fr))" }}>
+        <div style={{ display: "grid", gap: 12, gridTemplateColumns: "repeat(auto-fill, minmax(min(260px, 100%), 1fr))" }}>
           <NutritionColumn title="Privilégier" icon="✅" items={recs.nutrition.favor} colors={colors} type="favor" />
           <NutritionColumn title="Réduire" icon="⚠" items={recs.nutrition.reduce} colors={colors} type="reduce" />
           <NutritionColumn title="Éviter" icon="🚫" items={recs.nutrition.avoid} colors={colors} type="avoid" />
@@ -85,7 +85,7 @@ export default function RecommendationsTab({ values, colors, mode }) {
 
       {/* Lifestyle */}
       <Section title="Hygiène de vie" colors={colors}>
-        <div style={{ display: "grid", gap: 12, gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))" }}>
+        <div style={{ display: "grid", gap: 12, gridTemplateColumns: "repeat(auto-fill, minmax(min(280px, 100%), 1fr))" }}>
           {recs.lifestyle.map((ls, i) => (
             <div key={i} style={{
               padding: "16px 18px", borderRadius: 10,

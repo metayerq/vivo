@@ -12,3 +12,22 @@ body {
 #root {
   min-height: 100vh;
 }
+
+/* Hide scrollbar on tabs but keep scroll */
+.tabs-scroll::-webkit-scrollbar {
+  display: none;
+}
+.tabs-scroll {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+/* Number input remove spinners */
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+input[type="number"] {
+  -moz-appearance: textfield;
+}

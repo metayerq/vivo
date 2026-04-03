@@ -76,7 +76,7 @@ export default function SynthesisTab({ values, calcs, crossRefs, compositeScores
       {compositeScores.length > 0 && (
         <>
           <div style={{ fontSize: 12, color: colors.accent, fontWeight: 600, textTransform: "uppercase", letterSpacing: 1, marginBottom: 12 }}>Scores Composites</div>
-          <div style={{ display: "grid", gap: 12, gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))", marginBottom: 28 }}>
+          <div style={{ display: "grid", gap: 12, gridTemplateColumns: "repeat(auto-fill, minmax(min(280px, 100%), 1fr))", marginBottom: 28 }}>
             {compositeScores.map((sc) => (
               <CompositeScoreCard key={sc.id} score={sc} colors={colors} />
             ))}

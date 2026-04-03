@@ -22,7 +22,7 @@ export default function HistoryPanel({ open, onClose, history, onSave, onLoad, o
       <div
         onClick={(e) => e.stopPropagation()}
         style={{
-          width: 480, maxWidth: "95vw", height: "100%",
+          width: 480, maxWidth: "100vw", height: "100%",
           background: colors.settingsBg, borderLeft: `1px solid ${colors.border}`,
           padding: 28, overflowY: "auto",
         }}

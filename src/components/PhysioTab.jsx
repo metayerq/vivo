@@ -16,7 +16,7 @@ export default function PhysioTab({ profile, colors, isDark, modality, setModali
 
       <div style={{ marginBottom: 24 }}>
         <div style={{ fontSize: 12, color: colors.accent, fontWeight: 600, textTransform: "uppercase", letterSpacing: 1, marginBottom: 12 }}>Composition corporelle</div>
-        <div style={{ display: "flex", flexWrap: "wrap", gap: 10 }}>
+        <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
           <PhysioCard label="% MG (4-C)" value={p.bodyFatPct4C} unit="%" sub="Réf. Wang — objectif 18%" color={colors.normal} colors={colors} />
           <PhysioCard label="% MG (DEXA)" value={p.bodyFatPctDEXA} unit="%" sub="Surestim. connue vs 4-C" colors={colors} />
           <PhysioCard label="IMM" value={p.leanMassIndex} unit="kg/m²" sub="Bas-normal" color={colors.normal} colors={colors} />
@@ -28,7 +28,7 @@ export default function PhysioTab({ profile, colors, isDark, modality, setModali
 
       <div style={{ marginBottom: 24 }}>
         <div style={{ fontSize: 12, color: colors.accent, fontWeight: 600, textTransform: "uppercase", letterSpacing: 1, marginBottom: 12 }}>Métabolisme de repos</div>
-        <div style={{ display: "flex", flexWrap: "wrap", gap: 10 }}>
+        <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
           <PhysioCard label="REE mesuré" value={p.ree} unit="kcal/j" sub="-1% du prédit (H-B)" color={colors.optimal} colors={colors} />
           <PhysioCard label="RQ repos" value={p.rq} unit="" sub="Oxydation lipidique dominante" color={colors.optimal} colors={colors} />
           <PhysioCard label="FAT %" value={p.fatOxPct} unit="%" sub="Substrat lipidique au repos" color={colors.optimal} colors={colors} />
@@ -38,14 +38,14 @@ export default function PhysioTab({ profile, colors, isDark, modality, setModali
 
       <div style={{ marginBottom: 24 }}>
         <div style={{ fontSize: 12, color: colors.accent, fontWeight: 600, textTransform: "uppercase", letterSpacing: 1, marginBottom: 12 }}>Aptitude cardiorespiratoire</div>
-        <div style={{ display: "flex", flexWrap: "wrap", gap: 10 }}>
+        <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
           {/* VO2max expanded card */}
           <div style={{
             background: colors.surface, border: `1px solid ${colors.border}`,
-            borderRadius: 12, padding: "16px 18px", minWidth: 280, flex: "2 1 280px",
+            borderRadius: 10, padding: "12px 14px", minWidth: 0, flex: "1 1 100%",
           }}>
-            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 10 }}>
-              <span style={{ fontSize: 11, color: colors.textSecondary, letterSpacing: 0.5, textTransform: "uppercase" }}>VO₂max</span>
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 8, flexWrap: "wrap", gap: 6 }}>
+              <span style={{ fontSize: 10, color: colors.textSecondary, letterSpacing: 0.5, textTransform: "uppercase" }}>VO₂max</span>
               <PillToggle
                 options={VO2_MODALITIES}
                 value={modality}
@@ -53,9 +53,9 @@ export default function PhysioTab({ profile, colors, isDark, modality, setModali
                 colors={colors}
               />
             </div>
-            <div style={{ fontSize: 26, fontWeight: 700, color: colors.optimal, fontFamily: "'JetBrains Mono', monospace" }}>
-              {p.vo2max}<span style={{ fontSize: 13, fontWeight: 400, color: colors.textTertiary, marginLeft: 4 }}>mL/kg/min</span>
-              <span style={{ fontSize: 12, fontWeight: 400, color: colors.textTertiary, marginLeft: 8 }}>mesuré ({modLabel})</span>
+            <div style={{ fontSize: 22, fontWeight: 700, color: colors.optimal, fontFamily: "'JetBrains Mono', monospace" }}>
+              {p.vo2max}<span style={{ fontSize: 11, fontWeight: 400, color: colors.textTertiary, marginLeft: 3 }}>mL/kg/min</span>
+              <span style={{ fontSize: 10, fontWeight: 400, color: colors.textTertiary, marginLeft: 6 }}>mesuré ({modLabel})</span>
             </div>
             {modality !== "treadmill" && (
               <div style={{ fontSize: 18, fontWeight: 600, color: colors.accent, fontFamily: "'JetBrains Mono', monospace", marginTop: 4 }}>

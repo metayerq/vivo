@@ -11,7 +11,7 @@ export default function IndicesTab({ calcs, colors }) {
   }
 
   return (
-    <div style={{ display: "grid", gap: 12, gridTemplateColumns: "repeat(auto-fill, minmax(300px, 1fr))" }}>
+    <div style={{ display: "grid", gap: 10, gridTemplateColumns: "repeat(auto-fill, minmax(min(300px, 100%), 1fr))" }}>
       {calcs.map((c, i) => (
         <CalculatedIndex key={i} {...c} colors={colors} />
       ))}

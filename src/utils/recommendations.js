@@ -50,14 +50,20 @@ function buildPriorities(flags, values, mode) {
   if (flags.dyslipidemia || flags.ldl) {
     const ldl = parseFloat(values.ldl);
     const chol = parseFloat(values.cholTotal);
+    const tg = parseFloat(values.triglycerides);
+    const ins = parseFloat(values.insulin);
+    const g = parseFloat(values.glucose);
+    const homa = (!isNaN(g) && !isNaN(ins)) ? (g * ins) / 405 : null;
+    const metabolicallyHealthy = homa !== null && homa < 1.5 && !isNaN(tg) && tg < 150;
+
     priorities.push({
       severity: "critical",
       title: "Dyslipidémie — LDL & Cholestérol",
       icon: "🔴",
       content: {
-        clinical: `LDL-C ${ldl} mg/dL et cholestérol total ${chol} mg/dL — dyslipidémie mixte. Non-HDL ${chol - parseFloat(values.hdl)} mg/dL. Selon ESC 2019, cible LDL < 116 mg/dL (risque bas), < 100 mg/dL (risque modéré). Évaluer score SCORE2, discuter indication statines si lifestyle insuffisant à 3 mois. Doser apoB et Lp(a) pour stratification fine.`,
-        informed: `Ton LDL à ${ldl} et cholestérol total à ${chol} sont nettement au-dessus des seuils. C'est le flag principal de ce bilan. Le plan : alimentation anti-inflammatoire, Zone 2 intensive, et recontroler dans 3 mois. Si insuffisant, discuter un traitement avec ton médecin. Demander aussi un dosage d'apoB et Lp(a).`,
-        simple: `Ton mauvais cholestérol est trop élevé. C'est le point le plus important à corriger. L'alimentation et l'exercice d'endurance sont les premiers leviers. Si ça ne suffit pas dans 3 mois, ton médecin pourra proposer un traitement.`,
+        clinical: `LDL-C ${ldl} mg/dL et cholestérol total ${chol} mg/dL — dyslipidémie franche. Non-HDL ${chol - parseFloat(values.hdl)} mg/dL. ${metabolicallyHealthy ? `Contexte métabolique paradoxal : HOMA-IR ${homa.toFixed(2)}, TG ${Math.round(tg)} — profil insulinosensible. LDL élevé en l'absence de syndrome métabolique = forte suspicion d'hypercholestérolémie familiale hétérozygote (HeFH, prévalence 1/250). Critères Dutch Lipid Clinic à évaluer. ` : ""}Selon ESC 2019, cible LDL < 116 mg/dL (risque bas), < 100 mg/dL (risque modéré). Doser apoB et Lp(a) — le Lp(a) est génétique, non modifiable, un seul dosage suffit à vie. Si Lp(a) élevé → risque CV significativement majoré indépendamment du LDL. Discuter statine si lifestyle insuffisant à 3 mois.`,
+        informed: `Ton LDL à ${ldl} et cholestérol total à ${chol} sont nettement au-dessus des seuils. ${metabolicallyHealthy ? `Point important : ton profil métabolique est excellent (HOMA-IR ${homa.toFixed(2)}, triglycérides normaux). Un LDL aussi élevé avec un métabolisme aussi bon à 34 ans pointe fortement vers une composante génétique — probablement une hypercholestérolémie familiale (touche ~1 personne sur 250). Ce n'est pas ta faute, c'est génétique. ` : ""}Le plan : alimentation anti-inflammatoire + Zone 2 intensive + recontrôle à 3 mois. Si insuffisant, discuter un traitement (statine ou alternatives). Demande un dosage d'apoB et surtout de Lp(a) — c'est génétique, un seul test dans ta vie suffit, et ça change complètement l'évaluation du risque.`,
+        simple: `Ton mauvais cholestérol est trop élevé. ${metabolicallyHealthy ? `Mais ton corps gère très bien le sucre et les graisses par ailleurs — c'est un signe que le problème est probablement génétique (héréditaire), pas lié à ton mode de vie. Ça touche environ 1 personne sur 250. ` : ""}L'alimentation et l'exercice d'endurance sont les premiers leviers, mais si ça ne suffit pas dans 3 mois, ton médecin pourra proposer un traitement. Demande aussi un test de Lp(a) — c'est un marqueur génétique qu'on ne dose qu'une fois dans sa vie et qui est très important pour ton risque cardiaque.`,
       }[mode],
     });
   }
@@ -264,13 +270,24 @@ function buildFollowUp(flags, values, mode) {
   });
 
   recs.push({
+    urgency: "Dès que possible",
+    title: "Bilan génétique lipidique",
+    tests: ["Lp(a)", "apoB", "Score Dutch Lipid Clinic (critères HeFH)"],
+    reason: {
+      clinical: `LDL ${values.ldl} mg/dL dans un contexte métaboliquement sain (HOMA-IR bas, TG normaux) chez un homme de 34 ans actif — forte suspicion d'hypercholestérolémie familiale hétérozygote (HeFH, prévalence 1/250). Le dosage de Lp(a) est critique : marqueur génétique indépendant, non modifiable, un seul dosage à vie suffit. Si Lp(a) > 50 mg/dL (> 125 nmol/L), le risque CV est significativement majoré et la stratégie thérapeutique change (statine + éventuellement anti-PCSK9). L'apoB confirme le nombre de particules athérogènes. Évaluer les critères Dutch Lipid Clinic Network pour HeFH (score ≥ 6 = probable, ≥ 8 = certain). Enquête familiale recommandée (parents, fratrie).`,
+      informed: `Ton LDL à ${values.ldl} avec un métabolisme par ailleurs excellent pointe vers une composante génétique — l'hypercholestérolémie familiale (1 personne sur 250). Le test le plus important est le Lp(a) : c'est un marqueur 100% génétique qu'on ne dose qu'une seule fois dans sa vie. Si il est élevé, ça change complètement la stratégie. Demande aussi l'apoB et parle du score Dutch Lipid Clinic à ton médecin. Renseigne-toi aussi sur l'historique familial : est-ce que tes parents ou grands-parents ont eu du cholestérol élevé ou des événements cardiaques ?`,
+      simple: `Ton cholestérol élevé est probablement héréditaire (génétique) — ça s'appelle l'hypercholestérolémie familiale et ça touche 1 personne sur 250. Demande à ton médecin le test Lp(a) — c'est un test qu'on ne fait qu'une fois dans sa vie et qui est très important pour savoir quel traitement sera efficace. Demande aussi à ta famille si quelqu'un a du cholestérol élevé ou des problèmes cardiaques.`,
+    }[mode],
+  });
+
+  recs.push({
     urgency: "Prochain bilan",
     title: "Tests complémentaires recommandés",
-    tests: ["apoB", "Lp(a)", "PTH (parathormone)", "Coefficient de saturation de la transferrine", "Échographie hépatique"],
+    tests: ["PTH (parathormone)", "Coefficient de saturation de la transferrine", "Échographie hépatique"],
     reason: {
-      clinical: "L'apoB est le gold standard de la stratification CV (supérieur au LDL-C). Lp(a) est génétique et non modifiable — un seul dosage suffit à vie. La PTH lèvera l'ambiguïté sur le calcium à 10.7. Le CST confirmera ou infirmera la surcharge en fer. L'échographie hépatique est indiquée vu le pattern stéatosique (ALT élevée, De Ritis < 0.8).",
-      informed: "Ces tests complémentaires permettront de comprendre les zones d'ombre : le vrai risque CV (apoB, Lp(a)), la cause du calcium élevé (PTH), la réalité de la surcharge en fer (saturation transferrine), et l'état du foie (échographie).",
-      simple: "Demande ces tests supplémentaires à ton médecin pour avoir une image plus complète. Ils sont simples et permettent de lever les doutes sur le cholestérol, le foie, le calcium et le fer.",
+      clinical: "La PTH lèvera l'ambiguïté sur le calcium à 10.7 (hyperparathyroïdie primaire ?). Le CST confirmera ou infirmera la surcharge en fer. L'échographie hépatique est indiquée vu le pattern stéatosique (ALT élevée, De Ritis < 0.8).",
+      informed: "Ces tests complémentaires permettront de comprendre les zones d'ombre restantes : la cause du calcium élevé (PTH), la réalité de la surcharge en fer (saturation transferrine), et l'état du foie (échographie).",
+      simple: "Demande ces tests supplémentaires pour lever les doutes sur le calcium, le fer et le foie.",
     }[mode],
   });
 
