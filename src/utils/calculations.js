@@ -119,23 +119,24 @@ export function computeIndices(values, chronoAge, mode, physiometrics) {
   // ── Indice de Castelli (CholTotal/HDL) ──
   if (!isNaN(cholTotal) && !isNaN(hdl) && hdl > 0) {
     const castelli = cholTotal / hdl;
-    const status = castelli < 4.0 ? "optimal" : castelli < 5.0 ? "normal" : "flag";
+    // Homme: <4.0 faible, 4.0-5.5 modéré, >5.5 élevé (Castelli et al. 1983, Framingham)
+    const status = castelli < 4.0 ? "optimal" : castelli <= 5.5 ? "normal" : "flag";
     results.push({
-      label: "Indice de Castelli", value: castelli.toFixed(1), unit: "", status,
+      label: "Indice de Castelli", value: castelli.toFixed(2), unit: "", status,
       explanation: ({
         optimal: {
-          clinical: `Castelli I ${castelli.toFixed(1)} — risque CV faible (< 4.0 homme, Castelli et al. 1983 – Framingham). Profil lipoprotéique protecteur.`,
-          informed: `Indice de Castelli à ${castelli.toFixed(1)} — ton ratio cholestérol total / HDL est favorable. Risque cardiovasculaire faible.`,
+          clinical: `Castelli I ${castelli.toFixed(2)} — risque CV faible (< 4.0 homme, Castelli et al. 1983 – Framingham). Profil lipoprotéique protecteur.`,
+          informed: `Indice de Castelli à ${castelli.toFixed(2)} — ton ratio cholestérol total / HDL est favorable. Risque cardiovasculaire faible.`,
           simple: `Le rapport entre ton cholestérol total et ton bon cholestérol est bon. Ton cœur est bien protégé.`,
         },
         normal: {
-          clinical: `Castelli I ${castelli.toFixed(1)} — risque CV moyen (4.0–5.0). Marge d'optimisation via augmentation HDL et/ou réduction LDL.`,
-          informed: `Indice à ${castelli.toFixed(1)} — acceptable mais optimisable. Augmenter le HDL (exercice aérobie) serait bénéfique.`,
-          simple: `Ce rapport est correct. Plus d'exercice d'endurance pourrait l'améliorer en boostant le bon cholestérol.`,
+          clinical: `Castelli I ${castelli.toFixed(2)} — risque CV modéré (4.0–5.5 homme). Marge d'optimisation via augmentation HDL et/ou réduction LDL. Le HDL à ${hdl} mg/dL dilue partiellement l'impact du cholestérol total élevé.`,
+          informed: `Indice à ${castelli.toFixed(2)} — zone de risque modéré pour un homme (seuil élevé > 5.5). Augmenter le HDL (Zone 2, oméga-3) et baisser le LDL sont les deux leviers.`,
+          simple: `Ce rapport est dans la zone de risque modéré. C'est lié à ton cholestérol élevé. L'exercice d'endurance et l'alimentation peuvent l'améliorer.`,
         },
         flag: {
-          clinical: `Castelli I ${castelli.toFixed(1)} — risque CV élevé (> 5.0 homme). Investiguer dyslipidémie secondaire, lifestyle, hérédité.`,
-          informed: `Indice à ${castelli.toFixed(1)} — élevé. Risque cardiovasculaire augmenté. Bilan lipidique approfondi recommandé.`,
+          clinical: `Castelli I ${castelli.toFixed(2)} — risque CV élevé (> 5.5 homme). Profil athérogène. Investiguer dyslipidémie secondaire, lifestyle, hérédité.`,
+          informed: `Indice à ${castelli.toFixed(2)} — élevé (> 5.5). Risque cardiovasculaire augmenté. Bilan lipidique approfondi recommandé.`,
           simple: `Ce rapport est trop élevé. Ton risque pour le cœur est augmenté. Ton médecin peut t'aider.`,
         },
       })[status][mode],
